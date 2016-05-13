@@ -292,13 +292,15 @@ class Builder
         $this->initPackage();
 
         $this->message('Create package');
-        $this->createPackage();
+        $package_path = $this->createPackage();
 
         $this->message('Remove temp data');
         $this->exec('rm -rf ' . $this->unpacked_archive_from_path);
         $this->exec('rm -rf ' . $this->unpacked_archive_to_path);
 
         $this->message('Done');
+
+        return $package_path;
     }
 
     /**
@@ -335,7 +337,7 @@ class Builder
      */
     protected function createPackage()
     {
-        $this->package->create($this->work_directory_path . '/' . $this->getPackageName());
+        return $this->package->create($this->work_directory_path . '/' . $this->getPackageName());
     }
 
     /**

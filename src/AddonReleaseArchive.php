@@ -39,11 +39,8 @@ class AddonReleaseArchive extends ReleaseArchive
             throw new \Exception("Not found addon.xml");
         }
 
-        if (count($output) > 1) {
-            throw new \Exception("Many files addon.xml");
-        }
 
-        $file = $output[0];
+        $file = array_pop($output);
 
         exec("tar -xf {$this->file} -C {$dir} {$file}> /dev/null 2>&1", $output, $result);
         $file = realpath($dir . '/' . $file);

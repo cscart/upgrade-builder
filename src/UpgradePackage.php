@@ -168,6 +168,8 @@ class UpgradePackage implements UpgradePackageInterface
         file_put_contents("{$this->work_directory_path}/package.json", json_encode($this->schema, JSON_PRETTY_PRINT));
 
         $this->exec("cd {$this->work_directory_path}/; zip -r {$file} ./* 2>/dev/null");
+
+        return $file;
     }
 
     /**
