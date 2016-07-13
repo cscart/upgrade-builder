@@ -33,19 +33,17 @@ class AddonReleaseArchive extends ReleaseArchive
     {
         $dir = sys_get_temp_dir();
 
-        exec("tar -tf {$this->file} 2> /dev/null | grep -m 2 \"app/addons/.*/addon.xml\\$\"", $output, $result);
-
-        if ($result !== 0) {
+        $found_files = $this->archiver->find($this->file, 'app/addons/.*/addon.xml');
+        if (empty($found_files)) {
             throw new \Exception("Not found addon.xml");
         }
 
+        $file = array_pop($found_files);
 
-        $file = array_pop($output);
-
-        exec("tar -xf {$this->file} -C {$dir} {$file}> /dev/null 2>&1", $output, $result);
+        $ok = $this->archiver->extract($this->file, $dir, $file);
         $file = realpath($dir . '/' . $file);
 
-        if ($result !== 0 || !is_file($file)) {
+        if (!$ok || !is_file($file)) {
             throw new \Exception("Unable to extract addon.xml");
         }
 
