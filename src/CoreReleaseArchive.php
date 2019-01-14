@@ -42,9 +42,7 @@ class CoreReleaseArchive extends ReleaseArchive
         $file = null;
 
         foreach ($files as $file) {
-            exec("tar -xf {$this->file} -C {$dir} {$file}> /dev/null 2>&1", $output, $result);
-
-            if ($result === 0) {
+            if ($this->archiver->extract($this->file, $dir, $file)) {
                 $file = $dir . '/config.php';
                 break;
             }

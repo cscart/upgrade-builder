@@ -19,10 +19,13 @@ class CoreBuilderTest extends PHPUnit_Framework_TestCase
         exec("mkdir " . __DIR__ . '/data/runtime/tmp');
     }
 
-    public function testUpgradeFiles()
+    /**
+     * @dataProvider packageProvider
+     */
+    public function testUpgradeFiles($package1, $package2)
     {
-        $release1 = new \upgrade\builder\ReleaseArchive(__DIR__ . '/data/releases/ultimate_4.3.1.tgz', 'ultimate', '4.3.1');
-        $release2 = new \upgrade\builder\ReleaseArchive(__DIR__ . '/data/releases/ultimate_4.3.2.tgz', 'ultimate', '4.3.2');
+        $release1 = new \upgrade\builder\ReleaseArchive($package1['path'], $package1['name'], $package1['version']);
+        $release2 = new \upgrade\builder\ReleaseArchive($package2['path'], $package2['name'], $package2['version']);
 
         $builder = new \upgrade\builder\CoreBuilder($release1, $release2, __DIR__ . '/data/runtime/tmp');
 
@@ -83,5 +86,59 @@ class CoreBuilderTest extends PHPUnit_Framework_TestCase
         $this->assertArrayNotHasKey('app/addons/twigmo/file1.php', $files);
         $this->assertArrayNotHasKey('app/addons/sample/addon.xml', $files);
         $this->assertArrayHasKey('js/addons/twigmo_best/test.txt', $files);
+    }
+
+    public function packageProvider()
+    {
+        return array(
+            array(
+                array(
+                    'path' => __DIR__ . '/data/releases/ultimate_4.3.1.tgz',
+                    'name' => 'ultimate',
+                    'version' => '4.3.1'
+                ),
+                array(
+                    'path' => __DIR__ . '/data/releases/ultimate_4.3.2.tgz',
+                    'name' => 'ultimate',
+                    'version' => '4.3.2'
+                )
+            ),
+            array(
+                array(
+                    'path' => __DIR__ . '/data/releases/ultimate_4.3.1.zip',
+                    'name' => 'ultimate',
+                    'version' => '4.3.1'
+                ),
+                array(
+                    'path' => __DIR__ . '/data/releases/ultimate_4.3.2.zip',
+                    'name' => 'ultimate',
+                    'version' => '4.3.2'
+                )
+            ),
+            array(
+                array(
+                    'path' => __DIR__ . '/data/releases/ultimate_4.3.1.tgz',
+                    'name' => 'ultimate',
+                    'version' => '4.3.1'
+                ),
+                array(
+                    'path' => __DIR__ . '/data/releases/ultimate_4.3.2.zip',
+                    'name' => 'ultimate',
+                    'version' => '4.3.2'
+                )
+            ),
+            array(
+                array(
+                    'path' => __DIR__ . '/data/releases/ultimate_4.3.1.zip',
+                    'name' => 'ultimate',
+                    'version' => '4.3.1'
+                ),
+                array(
+                    'path' => __DIR__ . '/data/releases/ultimate_4.3.2.tgz',
+                    'name' => 'ultimate',
+                    'version' => '4.3.2'
+                )
+            )
+        );
     }
 }

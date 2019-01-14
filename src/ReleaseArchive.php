@@ -28,6 +28,12 @@ class ReleaseArchive implements ReleaseArchiveInterface
     protected $version = null;
 
     /**
+     * Archiver
+     * @var ArchiverInterface|null
+     */
+    protected $archiver = null;
+
+    /**
      * ReleaseArchive constructor.
      * @param string $file
      * @param string $name
@@ -43,6 +49,7 @@ class ReleaseArchive implements ReleaseArchiveInterface
         $this->name = $name;
         $this->version = $version;
         $this->file = $file;
+        $this->archiver = $this->getArchiver();
     }
     /**
      * Get product name
@@ -78,8 +85,17 @@ class ReleaseArchive implements ReleaseArchiveInterface
      */
     public function extractTo($path)
     {
-        exec("tar -xzvf {$this->file} -C {$path} 2>/dev/null", $output, $result);
+        return $this->archiver->extract($this->file, $path);
+    }
 
-        return $result === 0;
+    public function getArchiver()
+    {
+        $name_parts = explode('.', strtolower($this->file));
+        $ext = end($name_parts);
+        if ($ext == 'zip') {
+            return new ZipArchiver();
+        }
+
+        return new TarArchiver();
     }
 }

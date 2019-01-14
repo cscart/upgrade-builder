@@ -33,4 +33,10 @@ interface ReleaseArchiveInterface
      * @return bool
      */
     public function extractTo($path);
+
+    /**
+     * Provides archiver
+     * @return ArchiverInterface
+     */
+    public function getArchiver();
 }
