@@ -51,7 +51,11 @@ class TarArchiver implements ArchiverInterface
      */
     public function getExtractFlags($archive)
     {
-        $flags = '--overwrite -x';
+        $flags = '';
+        if (PHP_OS !== 'Darwin') {
+            $flags .= '--overwrite ';
+        }
+        $flags = '-x';
         if (substr(strtolower($archive), -2) === 'gz') {
             $flags .= 'z';
         }
