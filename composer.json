@@ -1,0 +1,13 @@
+{
+    "name": "cscart/upgrade-builder",
+    "description": "Core and add-on upgrade package building tool",
+    "license": "MIT",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "upgrade\\builder\\": [
+                "src"
+            ]
+        }
+    }
+}
