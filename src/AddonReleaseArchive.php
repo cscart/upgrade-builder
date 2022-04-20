@@ -38,7 +38,8 @@ class AddonReleaseArchive extends ReleaseArchive
             throw new \Exception("Not found addon.xml");
         }
 
-        $file = array_pop($found_files);
+        sort($found_files);
+        $file = reset($found_files);
 
         $ok = $this->archiver->extract($this->file, $dir, $file);
         $file = realpath($dir . '/' . $file);
